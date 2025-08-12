@@ -9,7 +9,12 @@ const TaskItem = observer(({ taskId }: TaskItemProps) => {
   const task = taskStore.tasks.find((t) => t.id === taskId);
   if (!task) return null;
 
-  return <li>{task.title}</li>;
+  return (
+    <li>
+      <span>{task.title}</span>
+      <button onClick={() => taskStore.deleteTask(taskId)}>Удалить</button>
+    </li>
+  );
 });
 
 export default TaskItem;

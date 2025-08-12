@@ -81,6 +81,10 @@ class TaskStore {
 
     this.tasks.push(newTask);
   }
+
+  deleteTask(taskId: number) {
+    this.tasks = this.tasks.filter((t) => t.id !== taskId);
+  }
 }
 
 export default new TaskStore();
