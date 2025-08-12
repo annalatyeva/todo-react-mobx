@@ -58,10 +58,28 @@ class TaskStore {
       subTasks: [],
     },
   ];
-  lastId = 0;
+  lastId = 5;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  addNewTask(title: string, description: string) {
+    this.lastId++;
+    title = title.trim();
+    description = description.trim();
+
+    const newTask: Task = {
+      id: this.lastId,
+      title,
+      description,
+      isCompleted: false,
+      isSelected: false,
+      isExpanded: false,
+      subTasks: [],
+    };
+
+    this.tasks.push(newTask);
   }
 }
 
