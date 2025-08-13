@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
-import taskStore from '../../stores/taskStore';
-import { Task } from '../../stores/taskStore';
+import taskStore, { Task } from '../../stores/taskStore';
 import EditButton from '../EditButton/EditButton';
 import AddNewTask from '../AddNewTask/AddNewTask';
 

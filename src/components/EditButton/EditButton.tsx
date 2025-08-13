@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { Task } from '../../stores/taskStore';
-import taskStore from '../../stores/taskStore';
+import taskStore, { Task } from '../../stores/taskStore';
 
 interface EditButtonProps {
   task: Task;

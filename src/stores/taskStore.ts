@@ -11,136 +11,41 @@ export interface Task {
 }
 
 class TaskStore {
-  tasks: Task[] = [
-    {
-      id: 1,
-      title: 'Задача 1',
-      description: 'Описание задачи 1',
-      isCompleted: false,
-      isSelected: false,
-      isExpanded: false,
-      subTasks: [
-        {
-          id: 11,
-          title: 'Подзадача 1.1',
-          description: 'Вложенная задача 1 уровня',
-          isCompleted: false,
-          isSelected: false,
-          isExpanded: false,
-          subTasks: [
-            {
-              id: 111,
-              title: 'Подзадача 1.1.1',
-              description: 'Вложенная задача 2 уровня',
-              isCompleted: true,
-              isSelected: false,
-              isExpanded: false,
-              subTasks: [
-                {
-                  id: 1111,
-                  title: 'Подзадача 1.1.1.1',
-                  description: 'Вложенная задача 3 уровня',
-                  isCompleted: false,
-                  isSelected: true,
-                  isExpanded: false,
-                  subTasks: [], // 4 уровень (пустой)
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: 'Задача 2',
-      description: 'Описание задачи 2',
-      isCompleted: false,
-      isSelected: false,
-      isExpanded: true,
-      subTasks: [
-        {
-          id: 21,
-          title: 'Подзадача 2.1',
-          description: 'Вложенная задача 1 уровня',
-          isCompleted: false,
-          isSelected: false,
-          isExpanded: false,
-          subTasks: [], // 2 уровень (пустой)
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: 'Задача 3',
-      description: 'Описание задачи 3',
-      isCompleted: true,
-      isSelected: false,
-      isExpanded: false,
-      subTasks: [], // 1 уровень (пустой)
-    },
-    {
-      id: 4,
-      title: 'Задача 4',
-      description: 'Описание задачи 4',
-      isCompleted: false,
-      isSelected: true,
-      isExpanded: false,
-      subTasks: [
-        {
-          id: 41,
-          title: 'Подзадача 4.1',
-          description: 'Вложенная задача 1 уровня',
-          isCompleted: false,
-          isSelected: false,
-          isExpanded: true,
-          subTasks: [
-            {
-              id: 411,
-              title: 'Подзадача 4.1.1',
-              description: 'Вложенная задача 2 уровня',
-              isCompleted: false,
-              isSelected: false,
-              isExpanded: false,
-              subTasks: [], // 3 уровень (пустой)
-            },
-            {
-              id: 412,
-              title: 'Подзадача 4.1.2',
-              description: 'Вложенная задача 2 уровня',
-              isCompleted: true,
-              isSelected: false,
-              isExpanded: false,
-              subTasks: [
-                {
-                  id: 4121,
-                  title: 'Подзадача 4.1.2.1',
-                  description: 'Вложенная задача 3 уровня',
-                  isCompleted: false,
-                  isSelected: false,
-                  isExpanded: false,
-                  subTasks: [], // 4 уровень (пустой)
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 5,
-      title: 'Задача 5',
-      description: 'Описание задачи 5',
-      isCompleted: false,
-      isSelected: false,
-      isExpanded: false,
-      subTasks: [], // 1 уровень (пустой)
-    },
-  ];
-  lastId = 5;
+  tasks: Task[];
+  lastId: number;
 
   constructor() {
+    this.tasks = this.getLocalStorage();
+    this.lastId = this.calculateLasId();
     makeAutoObservable(this);
+  }
+
+  calculateLasId() {
+    let lastId = 0;
+    const checkIds = (taskArray: Task[]) => {
+      for (let i = 0; i < taskArray.length; i++) {
+        if (taskArray[i].id > lastId) {
+          lastId = taskArray[i].id;
+        }
+        if (taskArray[i].subTasks.length > 0) {
+          checkIds(taskArray[i].subTasks);
+        }
+      }
+    };
+    checkIds(this.tasks);
+    return lastId;
+  }
+
+  getLocalStorage(): Task[] {
+    const storedData = localStorage.getItem('apricodTasks');
+    if (storedData) {
+      return JSON.parse(storedData);
+    }
+    return [];
+  }
+
+  setLocalStorage(taskList: Task[]) {
+    localStorage.setItem('apricodTasks', JSON.stringify(taskList));
   }
 
   addNewTask(title: string, description: string) {
@@ -159,6 +64,7 @@ class TaskStore {
     };
 
     this.tasks.push(newTask);
+    this.setLocalStorage(this.tasks);
   }
 
   addNewSubtask(title: string, description: string, mainTask: Task) {
@@ -177,6 +83,7 @@ class TaskStore {
     };
 
     mainTask.subTasks.push(newTask);
+    this.setLocalStorage(this.tasks);
   }
 
   deleteTask(taskId: number) {
@@ -192,6 +99,7 @@ class TaskStore {
       }
     };
     innerDeleteTask(this.tasks);
+    this.setLocalStorage(this.tasks);
   }
 
   editTask(taskId: number, title: string, description: string) {
@@ -208,6 +116,7 @@ class TaskStore {
       }
     };
     innerEditeTask(this.tasks);
+    this.setLocalStorage(this.tasks);
   }
 }
 
