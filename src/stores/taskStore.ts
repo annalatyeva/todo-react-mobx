@@ -175,6 +175,22 @@ class TaskStore {
     };
     innerDeleteTask(this.tasks);
   }
+
+  editTask(taskId: number, title: string, description: string) {
+    const innerEditeTask = (taskArray: Task[]) => {
+      for (let i = 0; i < taskArray.length; i++) {
+        if (taskArray[i].id === taskId) {
+          taskArray[i].title = title;
+          taskArray[i].description = description;
+          return;
+        }
+        if (taskArray[i].subTasks.length > 0) {
+          innerEditeTask(taskArray[i].subTasks);
+        }
+      }
+    };
+    innerEditeTask(this.tasks);
+  }
 }
 
 export default new TaskStore();
