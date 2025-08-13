@@ -4,7 +4,7 @@ export interface Task {
   id: number;
   title: string;
   description: string;
-  isCompleted: boolean;
+  isChecked: boolean;
   isSelected: boolean;
   isExpanded: boolean;
   subTasks: Task[];
@@ -13,6 +13,7 @@ export interface Task {
 class TaskStore {
   tasks: Task[];
   lastId: number;
+  selectedTask: Task | null = null;
 
   constructor() {
     this.tasks = this.getLocalStorage();
@@ -57,7 +58,7 @@ class TaskStore {
       id: this.lastId,
       title,
       description,
-      isCompleted: false,
+      isChecked: false,
       isSelected: false,
       isExpanded: false,
       subTasks: [],
@@ -76,7 +77,7 @@ class TaskStore {
       id: this.lastId,
       title,
       description,
-      isCompleted: false,
+      isChecked: false,
       isSelected: false,
       isExpanded: false,
       subTasks: [],
@@ -117,6 +118,22 @@ class TaskStore {
     };
     innerEditeTask(this.tasks);
     this.setLocalStorage(this.tasks);
+  }
+
+  selectTask(taskId: number) {
+    const innerSelectTask = (taskArray: Task[]) => {
+      for (let i = 0; i < taskArray.length; i++) {
+        taskArray[i].isSelected = false;
+        if (taskArray[i].id === taskId) {
+          this.selectedTask = taskArray[i];
+          return;
+        }
+        if (taskArray[i].subTasks.length > 0) {
+          innerSelectTask(taskArray[i].subTasks);
+        }
+      }
+    };
+    innerSelectTask(this.tasks);
   }
 }
 
