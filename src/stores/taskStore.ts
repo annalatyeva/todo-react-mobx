@@ -162,6 +162,30 @@ class TaskStore {
     innerExpandTask(this.tasks);
     this.setLocalStorage(this.tasks);
   }
+
+  checkTask(taskId: number) {
+    const checkAllInnerTask = (innerArray: Task[], isCheckedAll: boolean) => {
+      for (let k = 0; k < innerArray.length; k++) {
+        innerArray[k].isChecked = isCheckedAll;
+        if (innerArray[k].subTasks.length > 0) {
+          checkAllInnerTask(innerArray[k].subTasks, innerArray[k].isChecked);
+        }
+      }
+    };
+    const innerCheckTask = (taskArray: Task[]) => {
+      for (let i = 0; i < taskArray.length; i++) {
+        if (taskArray[i].id === taskId) {
+          taskArray[i].isChecked = !taskArray[i].isChecked;
+          checkAllInnerTask(taskArray[i].subTasks, taskArray[i].isChecked);
+        }
+        if (taskArray[i].subTasks.length > 0) {
+          innerCheckTask(taskArray[i].subTasks);
+        }
+      }
+    };
+    innerCheckTask(this.tasks);
+    this.setLocalStorage(this.tasks);
+  }
 }
 
 export default new TaskStore();

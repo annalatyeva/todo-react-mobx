@@ -17,6 +17,10 @@ const TaskItem = observer(({ task }: TaskItemProps) => {
     navigate(`tasks/${task.id}`);
   };
 
+  const handleChecked = (e: React.ChangeEvent, taskId: number) => {
+    taskStore.checkTask(taskId);
+  };
+
   const handleExpand = (e: React.MouseEvent, taskId: number) => {
     e.stopPropagation();
     taskStore.expandTask(taskId);
@@ -24,6 +28,11 @@ const TaskItem = observer(({ task }: TaskItemProps) => {
 
   return (
     <li onClick={(e) => handleSelect(e, task.id)}>
+      <input
+        type="checkbox"
+        checked={task.isChecked}
+        onChange={(e) => handleChecked(e, task.id)}
+      />
       {task.subTasks.length > 0 && (
         <button onClick={(e) => handleExpand(e, task.id)}>
           {task.isExpanded ? '▼' : '▶'}
