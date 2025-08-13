@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import taskStore from '../../stores/taskStore';
+import taskStore, { Task } from '../../stores/taskStore';
 
-const AddNewTask = observer(() => {
+type AddNewTaskProps =
+  | { mode: 'addTask' }
+  | { mode: 'addSubtask'; mainTask: Task };
+
+const AddNewTask = observer((props: AddNewTaskProps) => {
   const [isAdding, setIsAdding] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -14,7 +18,9 @@ const AddNewTask = observer(() => {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
-    taskStore.addNewTask(title, description);
+    props.mode === 'addTask'
+      ? taskStore.addNewTask(title, description)
+      : taskStore.addNewSubtask(title, description, props.mainTask);
     resetForm();
     setIsAdding(false);
   };
@@ -52,7 +58,9 @@ const AddNewTask = observer(() => {
       </button>
     </form>
   ) : (
-    <button onClick={handleAddClick}>Добавить задачу</button>
+    <button onClick={handleAddClick}>
+      Добавить {props.mode === 'addTask' ? 'задачу' : 'подзадачу'}
+    </button>
   );
 });
 

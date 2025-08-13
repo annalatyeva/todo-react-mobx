@@ -5,7 +5,7 @@ const TaskPanel = () => {
   return (
     <div>
       <TaskList />
-      <AddNewTask />
+      <AddNewTask mode="addTask" />
     </div>
   );
 };

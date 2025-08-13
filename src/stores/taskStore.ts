@@ -161,6 +161,24 @@ class TaskStore {
     this.tasks.push(newTask);
   }
 
+  addNewSubtask(title: string, description: string, mainTask: Task) {
+    this.lastId++;
+    title = title.trim();
+    description = description.trim();
+
+    const newTask: Task = {
+      id: this.lastId,
+      title,
+      description,
+      isCompleted: false,
+      isSelected: false,
+      isExpanded: false,
+      subTasks: [],
+    };
+
+    mainTask.subTasks.push(newTask);
+  }
+
   deleteTask(taskId: number) {
     const innerDeleteTask = (taskArray: Task[]) => {
       for (let i = 0; i < taskArray.length; i++) {
