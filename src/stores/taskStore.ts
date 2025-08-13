@@ -180,8 +180,8 @@ class TaskStore {
     const innerEditeTask = (taskArray: Task[]) => {
       for (let i = 0; i < taskArray.length; i++) {
         if (taskArray[i].id === taskId) {
-          taskArray[i].title = title;
-          taskArray[i].description = description;
+          taskArray[i].title = title.trim();
+          taskArray[i].description = description.trim();
           return;
         }
         if (taskArray[i].subTasks.length > 0) {
