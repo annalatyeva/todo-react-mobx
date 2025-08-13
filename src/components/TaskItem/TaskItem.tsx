@@ -10,20 +10,31 @@ interface TaskItemProps {
 
 const TaskItem = observer(({ task }: TaskItemProps) => {
   const navigate = useNavigate();
-  const handleClick = (e: React.MouseEvent, taskId: number) => {
+
+  const handleSelect = (e: React.MouseEvent, taskId: number) => {
     e.stopPropagation();
     taskStore.selectTask(taskId);
     navigate(`tasks/${task.id}`);
   };
 
+  const handleExpand = (e: React.MouseEvent, taskId: number) => {
+    e.stopPropagation();
+    taskStore.expandTask(taskId);
+  };
+
   return (
-    <li onClick={(e) => handleClick(e, task.id)}>
+    <li onClick={(e) => handleSelect(e, task.id)}>
+      {task.subTasks.length > 0 && (
+        <button onClick={(e) => handleExpand(e, task.id)}>
+          {task.isExpanded ? '▼' : '▶'}
+        </button>
+      )}
       <span>{task.title}</span>
       <button onClick={() => taskStore.deleteTask(task.id)}>Удалить</button>
       <EditButton task={task} taskId={task.id} />
       <AddNewTask mode="addSubtask" mainTask={task} />
 
-      {task.subTasks.length > 0 ? (
+      {task.subTasks.length > 0 && task.isExpanded ? (
         <ul>
           {task.subTasks.map((task) => (
             <TaskItem key={task.id} task={task} />

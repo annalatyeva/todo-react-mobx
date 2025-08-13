@@ -83,6 +83,7 @@ class TaskStore {
       subTasks: [],
     };
 
+    mainTask.isExpanded = true;
     mainTask.subTasks.push(newTask);
     this.setLocalStorage(this.tasks);
   }
@@ -134,6 +135,32 @@ class TaskStore {
       }
     };
     innerSelectTask(this.tasks);
+  }
+
+  expandTask(taskId: number) {
+    const expandAllInnerTask = (innerArray: Task[]) => {
+      for (let k = 0; k < innerArray.length; k++) {
+        innerArray[k].isExpanded = false;
+        if (innerArray[k].subTasks.length > 0) {
+          expandAllInnerTask(innerArray[k].subTasks);
+        }
+      }
+    };
+    const innerExpandTask = (taskArray: Task[]) => {
+      for (let i = 0; i < taskArray.length; i++) {
+        if (taskArray[i].id === taskId) {
+          taskArray[i].isExpanded = !taskArray[i].isExpanded;
+          if (!taskArray[i].isExpanded) {
+            expandAllInnerTask(taskArray[i].subTasks);
+          }
+        }
+        if (taskArray[i].subTasks.length > 0) {
+          innerExpandTask(taskArray[i].subTasks);
+        }
+      }
+    };
+    innerExpandTask(this.tasks);
+    this.setLocalStorage(this.tasks);
   }
 }
 
