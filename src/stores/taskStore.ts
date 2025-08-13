@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx';
 
-interface Task {
+export interface Task {
   id: number;
   title: string;
   description: string;
@@ -19,7 +19,37 @@ class TaskStore {
       isCompleted: false,
       isSelected: false,
       isExpanded: false,
-      subTasks: [],
+      subTasks: [
+        {
+          id: 11,
+          title: 'Подзадача 1.1',
+          description: 'Вложенная задача 1 уровня',
+          isCompleted: false,
+          isSelected: false,
+          isExpanded: false,
+          subTasks: [
+            {
+              id: 111,
+              title: 'Подзадача 1.1.1',
+              description: 'Вложенная задача 2 уровня',
+              isCompleted: true,
+              isSelected: false,
+              isExpanded: false,
+              subTasks: [
+                {
+                  id: 1111,
+                  title: 'Подзадача 1.1.1.1',
+                  description: 'Вложенная задача 3 уровня',
+                  isCompleted: false,
+                  isSelected: true,
+                  isExpanded: false,
+                  subTasks: [], // 4 уровень (пустой)
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       id: 2,
@@ -27,26 +57,75 @@ class TaskStore {
       description: 'Описание задачи 2',
       isCompleted: false,
       isSelected: false,
-      isExpanded: false,
-      subTasks: [],
+      isExpanded: true,
+      subTasks: [
+        {
+          id: 21,
+          title: 'Подзадача 2.1',
+          description: 'Вложенная задача 1 уровня',
+          isCompleted: false,
+          isSelected: false,
+          isExpanded: false,
+          subTasks: [], // 2 уровень (пустой)
+        },
+      ],
     },
     {
       id: 3,
       title: 'Задача 3',
       description: 'Описание задачи 3',
-      isCompleted: false,
+      isCompleted: true,
       isSelected: false,
       isExpanded: false,
-      subTasks: [],
+      subTasks: [], // 1 уровень (пустой)
     },
     {
       id: 4,
       title: 'Задача 4',
       description: 'Описание задачи 4',
       isCompleted: false,
-      isSelected: false,
+      isSelected: true,
       isExpanded: false,
-      subTasks: [],
+      subTasks: [
+        {
+          id: 41,
+          title: 'Подзадача 4.1',
+          description: 'Вложенная задача 1 уровня',
+          isCompleted: false,
+          isSelected: false,
+          isExpanded: true,
+          subTasks: [
+            {
+              id: 411,
+              title: 'Подзадача 4.1.1',
+              description: 'Вложенная задача 2 уровня',
+              isCompleted: false,
+              isSelected: false,
+              isExpanded: false,
+              subTasks: [], // 3 уровень (пустой)
+            },
+            {
+              id: 412,
+              title: 'Подзадача 4.1.2',
+              description: 'Вложенная задача 2 уровня',
+              isCompleted: true,
+              isSelected: false,
+              isExpanded: false,
+              subTasks: [
+                {
+                  id: 4121,
+                  title: 'Подзадача 4.1.2.1',
+                  description: 'Вложенная задача 3 уровня',
+                  isCompleted: false,
+                  isSelected: false,
+                  isExpanded: false,
+                  subTasks: [], // 4 уровень (пустой)
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       id: 5,
@@ -55,7 +134,7 @@ class TaskStore {
       isCompleted: false,
       isSelected: false,
       isExpanded: false,
-      subTasks: [],
+      subTasks: [], // 1 уровень (пустой)
     },
   ];
   lastId = 5;
@@ -83,7 +162,18 @@ class TaskStore {
   }
 
   deleteTask(taskId: number) {
-    this.tasks = this.tasks.filter((t) => t.id !== taskId);
+    const innerDeleteTask = (taskArray: Task[]) => {
+      for (let i = 0; i < taskArray.length; i++) {
+        if (taskArray[i].id === taskId) {
+          taskArray.splice(i, 1);
+          return;
+        }
+        if (taskArray[i].subTasks.length > 0) {
+          innerDeleteTask(taskArray[i].subTasks);
+        }
+      }
+    };
+    innerDeleteTask(this.tasks);
   }
 }
 

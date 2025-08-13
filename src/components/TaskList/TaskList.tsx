@@ -7,7 +7,7 @@ const TaskList = observer(() => {
     <div>
       <ul>
         {taskStore.tasks.map((task) => (
-          <TaskItem key={task.id} taskId={task.id} />
+          <TaskItem key={task.id} task={task} />
         ))}
       </ul>
     </div>
