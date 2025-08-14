@@ -164,26 +164,41 @@ class TaskStore {
   }
 
   checkTask(taskId: number) {
-    const checkAllInnerTask = (innerArray: Task[], isCheckedAll: boolean) => {
-      for (let k = 0; k < innerArray.length; k++) {
-        innerArray[k].isChecked = isCheckedAll;
-        if (innerArray[k].subTasks.length > 0) {
-          checkAllInnerTask(innerArray[k].subTasks, innerArray[k].isChecked);
-        }
+    const checkedAllSubtasks = (task: Task, isChecked: boolean) => {
+      task.isChecked = isChecked;
+      task.subTasks.forEach((subTask) =>
+        checkedAllSubtasks(subTask, isChecked)
+      );
+    };
+
+    const areAllSubtasksChecked = (task: Task): boolean => {
+      if (task.subTasks.length === 0) return task.isChecked;
+      return task.subTasks.every(areAllSubtasksChecked);
+    };
+
+    const updateParentTasks = (task: Task) => {
+      if (areAllSubtasksChecked(task)) {
+        task.isChecked = true;
       }
     };
-    const innerCheckTask = (taskArray: Task[]) => {
-      for (let i = 0; i < taskArray.length; i++) {
-        if (taskArray[i].id === taskId) {
-          taskArray[i].isChecked = !taskArray[i].isChecked;
-          checkAllInnerTask(taskArray[i].subTasks, taskArray[i].isChecked);
+
+    const findAndUpdateTask = (tasks: Task[]): boolean => {
+      for (const task of tasks) {
+        if (task.id === taskId) {
+          const newState = !task.isChecked;
+          checkedAllSubtasks(task, newState);
+          return true;
         }
-        if (taskArray[i].subTasks.length > 0) {
-          innerCheckTask(taskArray[i].subTasks);
+
+        if (findAndUpdateTask(task.subTasks)) {
+          updateParentTasks(task);
+          return true;
         }
       }
+      return false;
     };
-    innerCheckTask(this.tasks);
+
+    findAndUpdateTask(this.tasks);
     this.setLocalStorage(this.tasks);
   }
 }
