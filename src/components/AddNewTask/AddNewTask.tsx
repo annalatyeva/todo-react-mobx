@@ -74,6 +74,7 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
                   placeholder="Название задачи"
                   className={styles.Input}
                   required
+                  autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
@@ -100,6 +101,7 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
                   placeholder="Описание задачи"
                   className={styles.Input}
                   required
+                  autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>

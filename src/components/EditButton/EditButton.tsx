@@ -42,7 +42,13 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className={styles.Overlay} />
-        <Dialog.Content className={styles.Content}>
+        <Dialog.Content
+          className={styles.Content}
+          onOpenAutoFocus={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
           <Dialog.Title className={styles.Title}>
             Редактировать задачу
           </Dialog.Title>
@@ -70,6 +76,7 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
                   placeholder="Название задачи"
                   className={styles.Input}
                   required
+                  autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
@@ -96,6 +103,7 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
                   placeholder="Описание задачи"
                   className={styles.Input}
                   required
+                  autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
