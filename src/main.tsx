@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
+import { Theme } from '@radix-ui/themes';
 import App from './app';
+import '@radix-ui/themes/styles.css';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -9,8 +11,10 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <Theme>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Theme>
   </StrictMode>
 );

@@ -59,12 +59,13 @@ class TaskStore {
       title,
       description,
       isChecked: false,
-      isSelected: false,
+      isSelected: true,
       isExpanded: false,
       subTasks: [],
     };
 
     this.tasks.push(newTask);
+    this.selectTask(newTask.id);
     this.setLocalStorage(this.tasks);
   }
 
@@ -78,13 +79,14 @@ class TaskStore {
       title,
       description,
       isChecked: false,
-      isSelected: false,
+      isSelected: true,
       isExpanded: false,
       subTasks: [],
     };
 
     mainTask.isExpanded = true;
     mainTask.subTasks.push(newTask);
+    this.selectedTask = newTask;
     this.setLocalStorage(this.tasks);
   }
 

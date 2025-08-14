@@ -12,7 +12,9 @@
     "includedScripts": []
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.2.1",
     "mobx-react-lite": "^4.1.0",
+    "radix-ui": "^1.4.3",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router-dom": "6.29.0"

@@ -27,20 +27,22 @@ const TaskItem = observer(({ task }: TaskItemProps) => {
   };
 
   return (
-    <li onClick={(e) => handleSelect(e, task.id)}>
-      <input
-        type="checkbox"
-        checked={task.isChecked}
-        onChange={(e) => handleChecked(e, task.id)}
-      />
-      {task.subTasks.length > 0 && (
-        <button onClick={(e) => handleExpand(e, task.id)}>
-          {task.isExpanded ? '▼' : '▶'}
-        </button>
-      )}
-      <span>{task.title}</span>
-      <button onClick={() => taskStore.deleteTask(task.id)}>Удалить</button>
-      <EditButton task={task} taskId={task.id} />
+    <li>
+      <span onClick={(e) => handleSelect(e, task.id)}>
+        <input
+          type="checkbox"
+          checked={task.isChecked}
+          onChange={(e) => handleChecked(e, task.id)}
+        />
+        {task.subTasks.length > 0 && (
+          <button onClick={(e) => handleExpand(e, task.id)}>
+            {task.isExpanded ? '▼' : '▶'}
+          </button>
+        )}
+        <span>{task.title}</span>
+        <button onClick={() => taskStore.deleteTask(task.id)}>Удалить</button>
+        <EditButton task={task} taskId={task.id} />
+      </span>
       <AddNewTask mode="addSubtask" mainTask={task} />
 
       {task.subTasks.length > 0 && task.isExpanded ? (
