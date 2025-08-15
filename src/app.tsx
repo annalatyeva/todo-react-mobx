@@ -4,13 +4,12 @@ import DescriptionPanel from './components/DescriptionPanel/DescriptionPanel';
 
 export function App() {
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<MainContent />}>
-          <Route path="tasks/:taskId" element={<DescriptionPanel />} />
-        </Route>
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/" element={<MainContent />}>
+        <Route index element={<DescriptionPanel />} />
+        <Route path="tasks/:taskId" element={<DescriptionPanel />} />
+      </Route>
+    </Routes>
   );
 }
 

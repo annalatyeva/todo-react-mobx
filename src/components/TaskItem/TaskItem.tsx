@@ -27,6 +27,7 @@ const TaskItem = observer(
     const handleChecked = (taskId: number) => {
       taskStore.checkTask(taskId);
       taskStore.selectTask(taskId);
+      navigate(`tasks/${task.id}`);
     };
 
     const handleExpand = (e: React.MouseEvent, taskId: number) => {

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Dialog, Form } from 'radix-ui';
 import taskStore, { Task } from '../../stores/taskStore';
@@ -13,6 +14,7 @@ interface EditButtonProps {
 const EditButton = observer(({ task, taskId }: EditButtonProps) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
+  const navigate = useNavigate();
 
   const handleOpenChange = (open: boolean) => {
     if (open) {
@@ -24,6 +26,8 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     taskStore.editTask(taskId, title, description);
+    taskStore.selectTask(taskId);
+    navigate(`/tasks/${taskId}`);
 
     const closeButton = document.querySelector(
       '[data-radix-dialog-close]'
