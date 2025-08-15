@@ -7,10 +7,9 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
-    "preview": "vite preview",
+    "test": "nx test",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "test": "nx test"
+    "deploy": "gh-pages -d dist"
   },
   "nx": {
     "includedScripts": []
