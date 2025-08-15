@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router-dom';
 import TaskPanel from '../TaskPanel/TaskPanel';
+import styles from './mainContent.module.scss';
+import { Flex } from '@radix-ui/themes';
 
 const MainContent = () => {
   return (
-    <div>
+    <Flex className={styles.container}>
       <TaskPanel />
       <Outlet />
-    </div>
+    </Flex>
   );
 };
 

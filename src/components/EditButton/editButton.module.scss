@@ -1,13 +1,15 @@
-.Overlay {
+@import "../../variables";
+
+.overlay {
   background-color: var(--black-a9);
   position: fixed;
   inset: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.Content {
-  background-color: var(--gray-1);
-  border-radius: 6px;
+.content {
+  background-color: $task-highlight;
+  border-radius: 8px;
   box-shadow: var(--shadow-6);
   position: fixed;
   top: 50%;
@@ -18,62 +20,118 @@
   max-height: 85vh;
   padding: 25px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+
   &:focus {
     outline: none;
   }
+
+  .title {
+    margin: 0;
+    color: $tasks-test-color;
+    @include rubik(15px, 500);
+  }
+
+  .buttonsContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 }
 
-.Title {
-  margin: 0;
-  font-weight: 500;
-  color: #11304e;
-  font-family: "Rubik", sans-serif;
-  font-size: 16px;
+.root {
+  width: 260px;
+
+  .field {
+    display: grid;
+    margin-bottom: 10px;
+
+    .label {
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 35px;
+      color: $description-test-color;
+    }
+
+    .message {
+      font-size: 13px;
+      color: $description-test-color;
+      opacity: 0.8;
+    }
+
+    .input,
+    .textarea {
+      all: unset;
+      box-sizing: border-box;
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      font-size: 15px;
+      color: $description-test-color;
+      background-color: var(--black-a2);
+      box-shadow: 0 0 0 1px var(--black-a6);
+
+      &:hover {
+        box-shadow: 0 0 0 1px $description-test-color;
+      }
+
+      &:focus {
+        border: $checkbox-background 1px solid;
+      }
+
+      &::selection {
+        background-color: var(--black-a6);
+        color: $description-test-color;
+      }
+    }
+
+    .input {
+      padding: 0 10px;
+      height: 35px;
+      line-height: 1;
+    }
+
+    .textarea {
+      resize: none;
+      padding: 10px;
+    }
+  }
 }
 
-.Description {
-  margin: 10px 0 20px;
-  color: var(--mauve-11);
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-.IconButton {
-  all: unset;
-  font-family: inherit;
-  border-radius: 100%;
-  height: 25px;
-  width: 25px;
+.button {
+  box-sizing: border-box;
+  padding: 4px;
+  border-radius: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--violet-11);
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: var(--gray-3);
-  &:hover {
-    background-color: var(--violet-4);
+  background-color: rgba($color: #ffffff, $alpha: 0);
+  border: none;
+
+  &:hover:not(:disabled) {
+    background-color: $icon-hover;
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px var(--violet-7);
+    box-shadow: 0 0 0 2px $icon-hover;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
   }
 }
 
-.Fieldset {
-  all: unset;
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 15px;
+.buttonWithWord {
+  padding: 15px;
 }
 
-.Label {
-  font-size: 15px;
-  color: var(--violet-11);
-  width: 90px;
-  text-align: right;
+.buttonWithWord:not(:disabled) {
+  cursor: pointer;
+  background-color: $task-highlight;
+  border: $input-border;
+  border-radius: 8px;
 }
 
 @keyframes overlayShow {
@@ -94,62 +152,4 @@
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
-}
-
-.Root {
-  width: 260px;
-}
-
-.Field {
-  display: grid;
-  margin-bottom: 10px;
-}
-
-.Label {
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 35px;
-  color: black;
-}
-
-.Message {
-  font-size: 13px;
-  color: black;
-  opacity: 0.8;
-}
-
-.Input,
-.Textarea {
-  all: unset;
-  box-sizing: border-box;
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-size: 15px;
-  color: black;
-  background-color: var(--black-a2);
-  box-shadow: 0 0 0 1px var(--black-a6);
-  &:hover {
-    box-shadow: 0 0 0 1px black;
-  }
-  &:focus {
-    box-shadow: 0 0 0 2px black;
-  }
-  &::selection {
-    background-color: var(--black-a6);
-    color: black;
-  }
-}
-
-.Input {
-  padding: 0 10px;
-  height: 35px;
-  line-height: 1;
-}
-
-.Textarea {
-  resize: none;
-  padding: 10px;
 }

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Dialog, Form } from 'radix-ui';
 import taskStore, { Task } from '../../stores/taskStore';
+import { Pencil2Icon } from '@radix-ui/react-icons';
 import styles from './editButton.module.scss';
 
 interface EditButtonProps {
@@ -38,23 +39,25 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
   return (
     <Dialog.Root onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
-        <button className={styles.Button}>Редактировать</button>
+        <button className={styles.button}>
+          <Pencil2Icon className={styles.icon} />
+        </button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className={styles.Overlay} />
+        <Dialog.Overlay className={styles.overlay} />
         <Dialog.Content
-          className={styles.Content}
+          className={styles.content}
           onOpenAutoFocus={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
         >
-          <Dialog.Title className={styles.Title}>
+          <Dialog.Title className={styles.title}>
             Редактировать задачу
           </Dialog.Title>
 
-          <Form.Root className={styles.Root} onSubmit={handleSave}>
-            <Form.Field className={styles.Field} name="title">
+          <Form.Root className={styles.root} onSubmit={handleSave}>
+            <Form.Field className={styles.field} name="title">
               <div
                 style={{
                   display: 'flex',
@@ -62,8 +65,8 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Form.Label className={styles.Label}>Задача</Form.Label>
-                <Form.Message className={styles.Message} match="valueMissing">
+                <Form.Label className={styles.label}>Задача</Form.Label>
+                <Form.Message className={styles.message} match="valueMissing">
                   Введите задачу
                 </Form.Message>
               </div>
@@ -74,13 +77,13 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Название задачи"
-                  className={styles.Input}
+                  className={styles.input}
                   required
                   autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
-            <Form.Field className={styles.Field} name="description">
+            <Form.Field className={styles.field} name="description">
               <div
                 style={{
                   display: 'flex',
@@ -88,10 +91,10 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Form.Label className={styles.Label}>
+                <Form.Label className={styles.label}>
                   Описание задачи
                 </Form.Label>
-                <Form.Message className={styles.Message} match="valueMissing">
+                <Form.Message className={styles.message} match="valueMissing">
                   Введите описание задачи
                 </Form.Message>
               </div>
@@ -101,21 +104,26 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Описание задачи"
-                  className={styles.Input}
+                  className={styles.textarea}
                   required
                   autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
-            <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+            <div className={styles.buttonsContainer}>
               <Form.Submit asChild>
-                <button disabled={!isFormValid}>Сохранить</button>
+                <button
+                  disabled={!isFormValid}
+                  className={`${styles.button} ${styles.buttonWithWord}`}
+                >
+                  Сохранить
+                </button>
               </Form.Submit>
 
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className={styles.Button}
+                  className={`${styles.button} ${styles.buttonWithWord}`}
                   data-radix-dialog-close
                 >
                   Отмена

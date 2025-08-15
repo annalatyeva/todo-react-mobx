@@ -1,0 +1,122 @@
+@import "../../variables";
+
+.taskItem {
+  color: $tasks-test-color;
+  list-style: none;
+
+  .taskRow {
+    padding: 6px 8px 9px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    padding-left: calc(10px * var(--nesting-level, 0));
+  }
+
+  &.isChild {
+    .taskRow {
+      .taskTitle {
+        @include rubik(14px, 400);
+      }
+
+      .checkbox {
+        width: 18px;
+        height: 18px;
+        align-items: center;
+        padding-top: 4px;
+
+        .indicator {
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+      .toggleIcon {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+
+  .button {
+    box-sizing: border-box;
+    padding: 4px;
+    all: unset;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: rgba($color: #ffffff, $alpha: 0);
+    border: none;
+    &:hover {
+      background-color: $icon-hover;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 2px $icon-hover;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .checkbox {
+    all: unset;
+    width: 24px;
+    height: 24px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    background-color: $task-background;
+    border: 2px solid $input-border;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &[data-state="checked"] {
+      background-color: $checkbox-background;
+      border-color: $checkbox-background;
+    }
+
+    &:focus:not([data-state="checked"]) {
+      box-shadow: 0 0 0 2px rgba($checkbox-background, 0.3);
+    }
+
+    .indicator {
+      color: $task-background;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .toggleIcon {
+    margin: 4px;
+    width: 16px;
+    height: 16px;
+    transition: transform 0.15s ease-in-out;
+    transform: rotate(0deg);
+    transform-origin: center;
+    will-change: transform;
+
+    &.expanded {
+      transform: rotate(90deg);
+    }
+  }
+
+  .hiddenToggle {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .taskTitle {
+    @include rubik(16px, 500);
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}

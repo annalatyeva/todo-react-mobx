@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Dialog, Form } from 'radix-ui';
 import taskStore, { Task } from '../../stores/taskStore';
+import { PlusCircledIcon } from '@radix-ui/react-icons';
 import styles from './addNewTask.module.scss';
 
 type AddNewTaskProps =
@@ -40,19 +41,27 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
   return (
     <Dialog.Root onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
-        <button className={styles.Button}>
-          Добавить {props.mode === 'addTask' ? 'задачу' : 'подзадачу'}
+        <button
+          className={`${styles.button} ${
+            props.mode === 'addTask' ? styles.buttonWithWord : ''
+          }`}
+        >
+          {props.mode === 'addTask' ? (
+            'Добавить задачу'
+          ) : (
+            <PlusCircledIcon className={styles.icon} />
+          )}
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className={styles.Overlay} />
-        <Dialog.Content className={styles.Content}>
-          <Dialog.Title className={styles.Title}>
+        <Dialog.Overlay className={styles.overlay} />
+        <Dialog.Content className={styles.content}>
+          <Dialog.Title className={styles.title}>
             Добавить {props.mode === 'addTask' ? 'задачу' : 'подзадачу'}
           </Dialog.Title>
 
-          <Form.Root className={styles.Root} onSubmit={handleSave}>
-            <Form.Field className={styles.Field} name="title">
+          <Form.Root className={styles.root} onSubmit={handleSave}>
+            <Form.Field className={styles.field} name="title">
               <div
                 style={{
                   display: 'flex',
@@ -60,8 +69,8 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Form.Label className={styles.Label}>Задача</Form.Label>
-                <Form.Message className={styles.Message} match="valueMissing">
+                <Form.Label className={styles.label}>Задача</Form.Label>
+                <Form.Message className={styles.message} match="valueMissing">
                   Введите задачу
                 </Form.Message>
               </div>
@@ -72,13 +81,13 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Название задачи"
-                  className={styles.Input}
+                  className={styles.input}
                   required
                   autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
-            <Form.Field className={styles.Field} name="description">
+            <Form.Field className={styles.field} name="description">
               <div
                 style={{
                   display: 'flex',
@@ -86,10 +95,10 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
                   justifyContent: 'space-between',
                 }}
               >
-                <Form.Label className={styles.Label}>
+                <Form.Label className={styles.label}>
                   Описание задачи
                 </Form.Label>
-                <Form.Message className={styles.Message} match="valueMissing">
+                <Form.Message className={styles.message} match="valueMissing">
                   Введите описание задачи
                 </Form.Message>
               </div>
@@ -99,21 +108,26 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Описание задачи"
-                  className={styles.Input}
+                  className={styles.textarea}
                   required
                   autoComplete="off"
                 />
               </Form.Control>
             </Form.Field>
-            <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+            <div className={styles.buttonsContainer}>
               <Form.Submit asChild>
-                <button disabled={!isFormValid}>Сохранить</button>
+                <button
+                  disabled={!isFormValid}
+                  className={`${styles.button} ${styles.buttonWithWord}`}
+                >
+                  Сохранить
+                </button>
               </Form.Submit>
 
               <Dialog.Close asChild>
                 <button
                   type="button"
-                  className={styles.Button}
+                  className={`${styles.button} ${styles.buttonWithWord}`}
                   data-radix-dialog-close
                 >
                   Отмена

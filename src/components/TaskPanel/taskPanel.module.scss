@@ -1,0 +1,19 @@
+@import "../../variables";
+
+.container {
+  max-width: 460px;
+  padding: 36px 24px 36px 36px;
+  background-color: $task-background;
+  flex: 1;
+  overflow: auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    flex: 0 0 50vh;
+    min-height: 50vh;
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+}

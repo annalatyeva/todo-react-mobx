@@ -112,6 +112,7 @@ class TaskStore {
         if (taskArray[i].id === taskId) {
           taskArray[i].title = title.trim();
           taskArray[i].description = description.trim();
+          this.selectedTask = taskArray[i];
           return;
         }
         if (taskArray[i].subTasks.length > 0) {

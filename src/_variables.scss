@@ -1,0 +1,14 @@
+$tasks-test-color: #11304e;
+$description-test-color: #000000;
+$task-background: #ffffff;
+$description-background: #dce0e1;
+$task-highlight: #f7fbfd;
+$icon-hover: #e8f3f9;
+$checkbox-background: #4788f6;
+$input-border: #d9d9d9;
+@mixin rubik($size, $weight) {
+  font-family: "Rubik", sans-serif;
+  font-size: $size;
+  font-weight: $weight;
+  font-style: normal;
+}
