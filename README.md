@@ -1,82 +1,73 @@
-# TodoReactMobx
+<h1 align='center'>Приложение для ведения списка задач</h1>
+<p align='center'><img width="96" height="96" alt="task_list_business_checklist_feedback_survey_icon_251480" src="https://github.com/user-attachments/assets/e1523dc1-e2ce-458f-8339-d6e9ce74ec59" /></p>
+<h3 align="center"><a href="https://annalatyeva.github.io/word-learning-app/">View site</a></h3>
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+## Начало работы
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+### Установка
+1. Клонируйте репозиторий:
+```bash
+git clone https://github.com/annalatyeva/todo-react-mobx
+```
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/react-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+2. Перейдите в директорию проекта:
+```bash
+cd your-project
+```
 
-## Finish your CI setup
+3. Установите зависимости:
+```bash
+npm install
+```
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/D2qBOQRasB)
+### Разработка
 
-
-## Run tasks
-
-To run the dev server for your app, use:
-
-```sh
+- Запуск development-сервера:
+```bash
 npx nx serve todo-react-mobx
 ```
+или
+```bash
+npm run start
+```
 
-To create a production bundle:
+Откройте http://localhost:4200 в браузере.
 
-```sh
+- Сборка для production:
+```bash
 npx nx build todo-react-mobx
 ```
-
-To see all available targets to run for a project, run:
-
-```sh
-npx nx show project todo-react-mobx
+или
+```bash
+npm run build
 ```
+**Важно**
+Для корректной работы роутинга нужно перед тем, как запустить сборку, добавить аттрибут `basename="/todo-react-mobx/"` к тегу `BrowserRouter`, а также добавить `base: '/todo-react-mobx',` к `vite.config.ts`. 
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Стек
+* React
+* TypeScript
+* Mobx (`makeAutoObservable`, основная логика в стор)
+* SCSS модули
+* Radix UI (часть компонентов и иконки)
+* Vite
+* проект создан через nx standalone
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/react:app demo
-```
-
-To generate a new library, use:
-
-```sh
-npx nx g @nx/react:lib mylib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Реализованный функционал
+* Отображение списка задач в виде дерева. Если у задачи есть подзадачи, они находятся под родительской задачей с небольшим сдвигом вправо.
+* При клике на задачу справа отображается ее полный текст.
+* Для любой задачи можно создавать подзадачи (бесконечная вложенность).
+* Список подзадач можно сворачивать.
+* Слева от каждой задачи есть чекбокс. При его нажатии выделяется задача и все ее подзадачи.
+* При выделении всех подзадач также выделяется родительская задача.
+* Задачи можно удалять.
+* Можно редактировать заголовок/ текст задачи.
+* Хранение данных в localStorage.
+* Правый блок реализован через «вложенный» роутинг.
+* Для модальных окон создания/ редактирования задачи используются порталы.
 
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
-## Install Nx Console
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
 
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/react-standalone-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
