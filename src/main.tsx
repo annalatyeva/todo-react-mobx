@@ -11,7 +11,7 @@ const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <StrictMode>
     <Theme>
-      <BrowserRouter basename="/todo-react-mobx/">
+      <BrowserRouter>
         <App />
       </BrowserRouter>
     </Theme>
