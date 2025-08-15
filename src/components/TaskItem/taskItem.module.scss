@@ -1,5 +1,9 @@
 @import "../../variables";
 
+.highlighted {
+  background-color: $task-highlight;
+}
+
 .taskItem {
   color: $tasks-test-color;
   list-style: none;
@@ -56,11 +60,10 @@
     &:focus {
       box-shadow: 0 0 0 2px $icon-hover;
     }
-
-    .icon {
-      width: 20px;
-      height: 20px;
-    }
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
   }
 
   .checkbox {

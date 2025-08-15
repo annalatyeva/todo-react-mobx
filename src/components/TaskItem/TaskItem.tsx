@@ -9,13 +9,14 @@ import styles from './taskItem.module.scss';
 
 interface TaskItemProps {
   task: Task;
-  isChild?: boolean; // Флаг "это вложенная задача"
-  nestingLevel?: number; // Уровень вложенности (только для отступа)
+  isChild?: boolean;
+  nestingLevel?: number;
 }
 
 const TaskItem = observer(
   ({ task, isChild = false, nestingLevel = 0 }: TaskItemProps) => {
     const navigate = useNavigate();
+    const isHighlighted = taskStore.highlightedRootId === task.id;
 
     const handleSelect = (e: React.MouseEvent, taskId: number) => {
       e.stopPropagation();
@@ -25,6 +26,7 @@ const TaskItem = observer(
 
     const handleChecked = (taskId: number) => {
       taskStore.checkTask(taskId);
+      taskStore.selectTask(taskId);
     };
 
     const handleExpand = (e: React.MouseEvent, taskId: number) => {
@@ -34,7 +36,9 @@ const TaskItem = observer(
 
     return (
       <li
-        className={`${styles.taskItem} ${isChild ? styles.isChild : ''}`}
+        className={`${styles.taskItem} ${isChild ? styles.isChild : ''} ${
+          isHighlighted ? styles.highlighted : ''
+        }`}
         style={{ '--nesting-level': nestingLevel } as React.CSSProperties}
       >
         <div className={styles.taskRow}>
@@ -84,12 +88,7 @@ const TaskItem = observer(
             <TrashIcon className={styles.icon} />
           </button>
 
-          <button
-            onClick={(e) => e.stopPropagation()}
-            className={styles.button}
-          >
-            <AddNewTask mode="addSubtask" mainTask={task} />
-          </button>
+          <AddNewTask mode="addSubtask" mainTask={task} />
         </div>
 
         {task.subTasks.length > 0 && task.isExpanded && (
@@ -98,8 +97,8 @@ const TaskItem = observer(
               <TaskItem
                 key={subTask.id}
                 task={subTask}
-                isChild={true} // ВСЕ вложенные задачи получают уменьшенные стили
-                nestingLevel={nestingLevel + 1} // Увеличиваем только для отступа
+                isChild={true}
+                nestingLevel={nestingLevel + 1}
               />
             ))}
           </ul>

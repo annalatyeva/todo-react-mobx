@@ -7,6 +7,7 @@ export interface Task {
   isChecked: boolean;
   isSelected: boolean;
   isExpanded: boolean;
+  parentId: number | null;
   subTasks: Task[];
 }
 
@@ -14,6 +15,7 @@ class TaskStore {
   tasks: Task[];
   lastId: number;
   selectedTask: Task | null = null;
+  highlightedRootId: number | null = null;
 
   constructor() {
     this.tasks = this.getLocalStorage();
@@ -49,6 +51,21 @@ class TaskStore {
     localStorage.setItem('apricodTasks', JSON.stringify(taskList));
   }
 
+  highlightRootTask(taskId: number) {
+    const task = this.findTaskById(taskId);
+    if (!task) return false;
+
+    let rootTask = task;
+    while (rootTask.parentId !== null) {
+      const parent = this.findTaskById(rootTask.parentId);
+      if (!parent) break;
+      rootTask = parent;
+    }
+
+    this.highlightedRootId = rootTask.id;
+    return true;
+  }
+
   addNewTask(title: string, description: string) {
     this.lastId++;
     title = title.trim();
@@ -61,11 +78,13 @@ class TaskStore {
       isChecked: false,
       isSelected: true,
       isExpanded: false,
+      parentId: null,
       subTasks: [],
     };
 
     this.tasks.push(newTask);
     this.selectTask(newTask.id);
+    this.highlightRootTask(newTask.id);
     this.setLocalStorage(this.tasks);
   }
 
@@ -81,63 +100,89 @@ class TaskStore {
       isChecked: false,
       isSelected: true,
       isExpanded: false,
+      parentId: mainTask.id,
       subTasks: [],
     };
 
     mainTask.isExpanded = true;
     mainTask.subTasks.push(newTask);
     this.selectedTask = newTask;
+    this.highlightRootTask(newTask.id);
     this.setLocalStorage(this.tasks);
   }
 
-  deleteTask(taskId: number) {
-    const innerDeleteTask = (taskArray: Task[]) => {
+  findTaskById(taskId: number): Task | undefined {
+    const innerFindTask = (taskArray: Task[]): Task | undefined => {
       for (let i = 0; i < taskArray.length; i++) {
         if (taskArray[i].id === taskId) {
-          taskArray.splice(i, 1);
-          return;
+          return taskArray[i];
         }
+
         if (taskArray[i].subTasks.length > 0) {
-          innerDeleteTask(taskArray[i].subTasks);
+          const foundTask = innerFindTask(taskArray[i].subTasks);
+          if (foundTask) {
+            return foundTask;
+          }
         }
       }
+      return undefined;
     };
-    innerDeleteTask(this.tasks);
+
+    return innerFindTask(this.tasks);
+  }
+
+  deleteTask(taskId: number) {
+    const task = this.findTaskById(taskId);
+    if (!task) return;
+    this.highlightRootTask(task.id);
+
+    if (task.parentId === null) {
+      const index = this.tasks.findIndex((t) => t.id === taskId);
+      if (index !== -1) {
+        this.tasks.splice(index, 1);
+      }
+    } else {
+      const parent = this.findTaskById(task.parentId);
+      if (parent) {
+        const index = parent.subTasks.findIndex((t) => t.id === taskId);
+        if (index !== -1) {
+          parent.subTasks.splice(index, 1);
+        }
+      }
+    }
+
     this.setLocalStorage(this.tasks);
   }
 
   editTask(taskId: number, title: string, description: string) {
-    const innerEditeTask = (taskArray: Task[]) => {
-      for (let i = 0; i < taskArray.length; i++) {
-        if (taskArray[i].id === taskId) {
-          taskArray[i].title = title.trim();
-          taskArray[i].description = description.trim();
-          this.selectedTask = taskArray[i];
-          return;
-        }
-        if (taskArray[i].subTasks.length > 0) {
-          innerEditeTask(taskArray[i].subTasks);
-        }
-      }
-    };
-    innerEditeTask(this.tasks);
-    this.setLocalStorage(this.tasks);
+    const task = this.findTaskById(taskId);
+    if (task) {
+      task.title = title.trim();
+      task.description = description.trim();
+      task.isSelected = true;
+      this.selectedTask = task;
+      this.highlightRootTask(taskId);
+      this.setLocalStorage(this.tasks);
+    }
   }
 
   selectTask(taskId: number) {
-    const innerSelectTask = (taskArray: Task[]) => {
-      for (let i = 0; i < taskArray.length; i++) {
-        taskArray[i].isSelected = false;
-        if (taskArray[i].id === taskId) {
-          this.selectedTask = taskArray[i];
-          return;
+    const resetSelection = (tasks: Task[]) => {
+      tasks.forEach((task) => {
+        task.isSelected = false;
+        if (task.subTasks.length > 0) {
+          resetSelection(task.subTasks);
         }
-        if (taskArray[i].subTasks.length > 0) {
-          innerSelectTask(taskArray[i].subTasks);
-        }
-      }
+      });
     };
-    innerSelectTask(this.tasks);
+    resetSelection(this.tasks);
+
+    const task = this.findTaskById(taskId);
+    if (task) {
+      task.isSelected = true;
+      this.selectedTask = task;
+      this.highlightRootTask(taskId);
+    }
   }
 
   expandTask(taskId: number) {
@@ -163,6 +208,7 @@ class TaskStore {
       }
     };
     innerExpandTask(this.tasks);
+    this.highlightRootTask(taskId);
     this.setLocalStorage(this.tasks);
   }
 
@@ -180,9 +226,8 @@ class TaskStore {
     };
 
     const updateParentTasks = (task: Task) => {
-      if (areAllSubtasksChecked(task)) {
-        task.isChecked = true;
-      }
+      const allChecked = areAllSubtasksChecked(task);
+      task.isChecked = allChecked;
     };
 
     const findAndUpdateTask = (tasks: Task[]): boolean => {
@@ -202,6 +247,7 @@ class TaskStore {
     };
 
     findAndUpdateTask(this.tasks);
+    this.highlightRootTask(taskId);
     this.setLocalStorage(this.tasks);
   }
 }

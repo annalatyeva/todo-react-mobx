@@ -42,6 +42,7 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
     <Dialog.Root onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
         <button
+          onClick={(e) => e.stopPropagation()}
           className={`${styles.button} ${
             props.mode === 'addTask' ? styles.buttonWithWord : ''
           }`}
@@ -55,7 +56,10 @@ const AddNewTask = observer((props: AddNewTaskProps) => {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className={styles.overlay} />
-        <Dialog.Content className={styles.content}>
+        <Dialog.Content
+          className={styles.content}
+          aria-describedby={'Добавить задачу'}
+        >
           <Dialog.Title className={styles.title}>
             Добавить {props.mode === 'addTask' ? 'задачу' : 'подзадачу'}
           </Dialog.Title>

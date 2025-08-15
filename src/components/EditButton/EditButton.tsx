@@ -39,14 +39,13 @@ const EditButton = observer(({ task, taskId }: EditButtonProps) => {
   return (
     <Dialog.Root onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
-        <button className={styles.button}>
-          <Pencil2Icon className={styles.icon} />
-        </button>
+        <Pencil2Icon className={styles.icon} />
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className={styles.overlay} />
         <Dialog.Content
           className={styles.content}
+          aria-describedby={'Редактировать задачу'}
           onOpenAutoFocus={(e) => {
             e.preventDefault();
             e.stopPropagation();
