@@ -1,6 +1,6 @@
 <h1 align='center'>Приложение для ведения списка задач</h1>
 <p align='center'><img width="96" height="96" alt="task_list_business_checklist_feedback_survey_icon_251480" src="https://github.com/user-attachments/assets/e1523dc1-e2ce-458f-8339-d6e9ce74ec59" /></p>
-<h3 align="center"><a href="https://annalatyeva.github.io/word-learning-app/">View site</a></h3>
+<h3 align="center"><a href="https://annalatyeva.github.io/todo-react-mobx/">View site</a></h3>
 
 ## Начало работы
 
